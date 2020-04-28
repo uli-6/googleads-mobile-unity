@@ -129,16 +129,19 @@ namespace GoogleMobileAds.Api
         // Returns the reward item for the loaded rewarded ad.
         public Reward GetRewardItem()
         {
-            if (client.IsLoaded()) {
-              return client.GetRewardItem();
+            if (client.IsLoaded())
+            {
+                return client.GetRewardItem();
             }
             return null;
         }
 
         // Returns the mediation adapter class name.
+        [Obsolete("MediationAdapterClassName() is deprecated, use GetResponseInfo.MediationAdapterClassName() instead.")]
         public string MediationAdapterClassName()
         {
             return this.client.MediationAdapterClassName();
         }
+
     }
 }

@@ -145,6 +145,7 @@ namespace GoogleMobileAds.Api
         }
 
         // Returns the mediation adapter class name.
+        [Obsolete("MediationAdapterClassName() is deprecated, use GetResponseInfo.MediationAdapterClassName() instead.")]
         public string MediationAdapterClassName()
         {
             return this.client.MediationAdapterClassName();

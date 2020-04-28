@@ -17,12 +17,15 @@ package com.google.unity.ads;
 
 import android.app.Activity;
 import android.util.Log;
-
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.ResponseInfo;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * Native reward based video ad implementation for the Google Mobile Ads Unity plugin.
@@ -241,6 +244,33 @@ public class RewardBasedVideo {
      */
     public String getMediationAdapterClassName() {
         return rewardBasedVideo != null ? rewardBasedVideo.getMediationAdapterClassName() : null;
+    }
+
+    /**
+     * Returns the request response info.
+     */
+    public ResponseInfo getResponseInfo() {
+        FutureTask<ResponseInfo> task = new FutureTask<>(new Callable<ResponseInfo>() {
+            @Override
+            public ResponseInfo call() {
+                return rewardBasedVideo.getResponseInfo();
+            }
+        });
+        activity.runOnUiThread(task);
+
+        ResponseInfo result = null;
+        try {
+            result = task.get();
+        } catch (InterruptedException e) {
+            Log.e(PluginUtils.LOGTAG,
+                    String.format("Unable to check rewarded response info: %s",
+                            e.getLocalizedMessage()));
+        } catch (ExecutionException e) {
+            Log.e(PluginUtils.LOGTAG,
+                    String.format("Unable to check rewarded response info: %s",
+                            e.getLocalizedMessage()));
+        }
+        return result;
     }
 
     /**
